@@ -4,6 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
+import { sql } from "drizzle-orm";
 
 export const appRouter = router({
   system: systemRouter,
@@ -47,6 +48,21 @@ export const appRouter = router({
       .mutation(({ ctx, input }) =>
         db.deleteSocialMediaLink(input.id, ctx.user.id)
       ),
+    syncYoutube: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        const database = await db.getDb();
+        if (!database) throw new Error("Database not available");
+        try {
+          await database.execute(sql`
+            INSERT INTO socialMediaLinks (userId, platform, url, username, createdAt, updatedAt)
+            VALUES (${ctx.user.id}, 'YouTube', 'https://www.youtube.com/@bandavexel', 'bandavexel', NOW(), NOW())
+            ON DUPLICATE KEY UPDATE updatedAt = NOW();
+          `);
+          return { success: true, message: "YouTube link synced successfully" };
+        } catch (error: any) {
+          return { success: false, message: error.message };
+        }
+      }),
   }),
 
   // Calendar Events

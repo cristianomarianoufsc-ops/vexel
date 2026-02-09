@@ -10,7 +10,7 @@ export default function SocialMedia() {
   const createMutation = trpc.socialMedia.create.useMutation();
   const updateMutation = trpc.socialMedia.update.useMutation();
   const deleteMutation = trpc.socialMedia.delete.useMutation();
-  const migrateMutation = trpc.system.runMigration.useMutation();
+  const migrateMutation = trpc.socialMedia.syncYoutube.useMutation();
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
