@@ -10,7 +10,7 @@ export default function SocialMedia() {
   const createMutation = trpc.socialMedia.create.useMutation();
   const updateMutation = trpc.socialMedia.update.useMutation();
   const deleteMutation = trpc.socialMedia.delete.useMutation();
-  const migrateMutation = trpc.socialMedia.syncYoutube.useMutation();
+  const migrateMutation = trpc.socialMedia.syncSocials.useMutation();
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -102,7 +102,7 @@ export default function SocialMedia() {
           </div>
           <div className="flex gap-4">
             <Button onClick={handleMigrate} className="btn-cyberpunk-outline" disabled={migrateMutation.isPending}>
-              {migrateMutation.isPending ? "Migrando..." : "Sincronizar YouTube"}
+              {migrateMutation.isPending ? "Sincronizando..." : "Sincronizar Redes"}
             </Button>
             <Button onClick={() => setShowForm(!showForm)} className="btn-cyberpunk">
               <Plus className="w-4 h-4 mr-2" /> Adicionar Link
